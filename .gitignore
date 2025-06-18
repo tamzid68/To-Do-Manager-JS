@@ -68,3 +68,5 @@ temp/
 .cache/ 
 
 # Other files
+users.json
+.env
