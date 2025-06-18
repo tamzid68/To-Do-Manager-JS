@@ -2,11 +2,18 @@ const express = require('express');
 const app = express();
 require('dotenv').config();
 const bodyParser = require('body-parser');
-const userRouter = require('./routes/authRoutes');
+const authRoutes = require('./routes/authRoutes');
+const todoRoutes = require('./routes/todoRoutes');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use('/api', userRouter);
+
+app.get('/', (req, res) => {
+   res.send("TO_DO Manager API is running..."); 
+});
+
+app.use('/api/auth', authRoutes);
+app.use('/api/todo', todoRoutes);
 
 
 app.listen(3000, () => {
