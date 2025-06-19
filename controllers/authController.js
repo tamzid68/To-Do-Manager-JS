@@ -46,22 +46,13 @@ const signup = async (req, res) => {
 const login = async (req, res) => {
     try {
         const { username, password } = req.body || {};
-
-        if (!username || !password)
-            return res.status(400).json({ message: "Username and password are required" });
-
         const users = await readData(userFile);
-
-        //1. Check if the user exists
         const user = users.find(user => user.username === username);
-        if (!user)
-            return res.status(400).json({ message: "user not found" });
 
-        //2. Check if the password matches
-        // bcrypt.compare() is an asynchronous function that compares the provided password with the hashed password stored in the database
-        if (!(await bcrypt.compare(password, user.password)))
+        // Use a single error message for both cases checking username and password
+        if (!user || !(await bcrypt.compare(password, user.password))) {
             return res.status(400).json({ message: "Invalid username or password" });
-
+        }
 
         //3. If the user exists and the password matches, generate a JWT token
         // The payload can contain any information you want to include in the token
